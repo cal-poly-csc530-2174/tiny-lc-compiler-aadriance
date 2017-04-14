@@ -8,7 +8,7 @@ def process(exp):
         if type(exp[0]) is Symbol:
             test = exp[0].value()
             if test == 'λ' : 
-                outStr = '(function (' + process(exp[1]) + ')' + '{' +  process(exp[2]) + '})'
+                outStr = '(function (' + process(exp[1]) + ')' + '{ return' +  process(exp[2]) + '})'
                 print('lam step')
             elif test == '+' : 
                 outStr = '(' + process(exp[1]) + '+' + process(exp[2]) + ')'
@@ -22,6 +22,9 @@ def process(exp):
             elif test == 'println' : 
                 outStr = '(console.log(' + process(exp[1]) + '))'
                 print('print step')
+            elif len(exp) == 2:
+                    outStr = '(' + process(exp[0]) + '(' + process(exp[1]) + '))'
+                    print('apply step')
             else:
                 outStr = test
                 print('string step')
@@ -53,7 +56,8 @@ def main():
     exp = loads(inStr)
     print(exp)
     print(len(exp))
-    print(process(exp))
+    outStr = process(exp)
+    print(outStr)
     outF.write(outStr)
 
 if __name__ == "__main__":
